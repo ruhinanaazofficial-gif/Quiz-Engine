@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Automated Quiz Engine</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Automated Quiz Engine</h1>
+
+<input type="text" id="name" placeholder="Enter your name">
+
+<br><br>
+
+<button onclick="startQuiz()">Start Quiz</button>
+
+</div>
+
+<script>
+
+function startQuiz(){
+
+let name = document.getElementById("name").value;
+
+if(name===""){
+alert("Please enter your name");
+return;
+}
+
+localStorage.setItem("username",name);
+
+window.location="quiz.html";
+
+}
+
+</script>
+
+</body>
+</html>

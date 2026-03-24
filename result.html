@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quiz Result</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+  <h2>Quiz Result</h2>
+
+  <p id="result"></p>
+
+  <!-- ✅ Certificate Button -->
+  <button id="downloadBtn" style="display:none;">
+    Download Certificate
+  </button>
+
+  <br><br>
+
+  <button onclick="restart()">Take Quiz Again</button>
+
+</div>
+
+<script>
+
+let name = localStorage.getItem("username");
+let score = localStorage.getItem("score");
+
+// ✅ Show result
+document.getElementById("result").innerHTML =
+  name + ", your score is: " + score;
+
+// 🔥 Call backend to generate certificate
+fetch("http://localhost:3000/submit", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    name: name,
+    score: score
+  })
+})
+.then(res => res.json())
+.then(data => {
+
+  console.log("Response:", data); // check in console
+
+  // ✅ Show certificate button if available
+  if (data.certificate) {
+    const btn = document.getElementById("downloadBtn");
+
+    btn.style.display = "block";
+
+    btn.onclick = () => {
+      window.open(`http://localhost:3000/${data.certificate}`);
+    };
+  }
+
+})
+.catch(err => {
+  console.error("❌ Error:", err);
+});
+
+function restart() {
+  window.location = "index.html";
+}
+
+</script>
+
+</body>
+</html>

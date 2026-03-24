@@ -1,0 +1,149 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #ff6a00, #ee0979);
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Main container */
+.container {
+  width: 420px;
+  background: transparent;
+  text-align: center;
+}
+
+/* Question Box */
+.question-box {
+  background: #f7c948;
+  padding: 25px;
+  border-radius: 20px;
+  position: relative;
+  margin-bottom: 30px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* Floating ? icon */
+.icon {
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #6a0dad;
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Question text */
+.question-box h2 {
+  margin-top: 10px;
+  color: #333;
+}
+
+/* Options layout */
+.options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+/* Option buttons */
+.option {
+  background: #f7c948;
+  padding: 12px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+}
+
+/* Hover effect */
+.option:hover {
+  background: #6a0dad;
+  color: white;
+}
+
+/* Selected option */
+.option.selected {
+  background: #6a0dad;
+  color: white;
+}
+
+/* Button */
+button {
+  margin-top: 20px;
+  padding: 12px 25px;
+  font-size: 16px;
+  background: #6a0dad;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #5a0cb0;
+}
+
+/* Remove old question styling */
+.question {
+  display: none;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100vh;
+
+  background: linear-gradient(135deg, #ff4b2b, #ff416c);
+}
+
+.container {
+  text-align: center;
+}
+
+h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+#result {
+  font-size: 18px;
+  margin-bottom: 25px;
+}
+
+/* 🔥 Button styling */
+button {
+  display: block;
+  margin: 10px auto;   /* centers button */
+  padding: 12px 25px;
+  border: none;
+  border-radius: 10px;
+
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.05);
+}

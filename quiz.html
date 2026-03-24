@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Quiz</title>
+
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="quiz-container">
+
+  <!-- Question Box -->
+  <div class="question-box">
+    <div class="icon">?</div>
+    <h2 id="question-text">Loading...</h2>
+  </div>
+
+  <!-- Options -->
+  <div class="options" id="options"></div>
+
+  <!-- Button -->
+  <button class="next-btn" onclick="nextQuestion()">Next</button>
+
+</div>
+
+<script>
+
+let questions = [];
+let currentIndex = 0;
+let score = 0;
+let selectedAnswer = null;
+
+/* Fetch questions */
+fetch("http://localhost:3000/questions")
+.then(res => res.json())
+.then(data => {
+  questions = data;
+  loadQuestion();
+})
+.catch(err => {
+  console.error("Fetch error:", err);
+});
+
+/* Load Question */
+function loadQuestion(){
+
+  let q = questions[currentIndex];
+
+  if(!q){
+    document.getElementById("question-text").innerText = "No question available";
+    return;
+  }
+
+  document.getElementById("question-text").innerText = q.question;
+
+  let optionsHTML = "";
+
+  // ✅ Clean options safely
+  const rawOptions = [q.option1, q.option2, q.option3, q.option4];
+
+  const options = rawOptions
+    .map(opt => opt ? opt.toString().trim() : "")
+    .filter(opt => opt.length > 0);
+
+  // ❗ If no options
+  if(options.length === 0){
+    optionsHTML = "<p style='color:white'>⚠️ No options available</p>";
+  }
+
+  // ✅ Render options WITHOUT inline JS
+  options.forEach((opt, index) => {
+    optionsHTML += `
+      <div class="option" data-value="${opt}">
+        ${String.fromCharCode(65 + index)}. ${opt}
+      </div>
+    `;
+  });
+
+  document.getElementById("options").innerHTML = optionsHTML;
+
+  // ✅ Add click listeners safely
+  document.querySelectorAll(".option").forEach(el => {
+    el.addEventListener("click", function(){
+      document.querySelectorAll(".option").forEach(o => o.classList.remove("selected"));
+      this.classList.add("selected");
+      selectedAnswer = this.getAttribute("data-value");
+    });
+  });
+}
+
+function nextQuestion(){
+
+  if(!selectedAnswer){
+    alert("Please select an answer!");
+    return;
+  }
+
+  // ✅ Check answer
+  if(selectedAnswer === questions[currentIndex].answer){
+    score++;
+  }
+
+  // Move to next
+  currentIndex++;
+  selectedAnswer = null;
+
+  // ✅ If more questions → load next
+  if(currentIndex < questions.length){
+    loadQuestion();
+  } else {
+    // ✅ Quiz finished
+    finishQuiz();
+  }
+}
+
+
+/* ✅ FINAL QUIZ END FUNCTION */
+function finishQuiz(){
+
+  localStorage.setItem("score", score);
+
+  const name = localStorage.getItem("username");
+
+  fetch("http://localhost:3000/submit", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      name: name,
+      score: score
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+
+    console.log("Quiz finished:", data);
+
+    // Save certificate if exists
+    if (data.certificate) {
+      localStorage.setItem("certificate", data.certificate);
+    }
+
+    // ✅ Redirect AFTER API completes
+    window.location = "result.html";
+  })
+  .catch(err => {
+    console.error("Error submitting quiz:", err);
+    alert("Something went wrong. Please try again.");
+  });
+}
+
+/* Submit Quiz */
+function submitQuiz(){
+
+  localStorage.setItem("score", score);
+  const name = localStorage.getItem("username");
+
+  fetch("http://localhost:3000/submit", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    name: username,
+    score: score
+  })
+})
+.then(res => res.json())
+.then(data => {
+
+  console.log(data); // 👈 check this in console
+
+  // ✅ SHOW RESULT
+  document.getElementById("result").innerText =
+    `${username}, your score is: ${score}`;
+
+  // 🔥 IMPORTANT: OPEN CERTIFICATE
+  if (data.certificate) {
+    window.open(`http://localhost:3000/${data.certificate}`);
+  }
+
+});
+
+  window.location = "result.html";
+}
+
+</script>
+
+</body>
+</html>
